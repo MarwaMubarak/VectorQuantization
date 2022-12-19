@@ -35,17 +35,17 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-//
+
 //        einstein.jpg
 //        image.jpg
 //        img.jpg
                 try {
-                    VectorQuantization.originalImage = VectorQuantization.readImage("img.jpg");
+                    VectorQuantization.originalImage = VectorQuantization.readImage("city.jpg");
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                VectorQuantization.vectorWidth = Integer.parseInt(input2.getText());
                 VectorQuantization.vectorHeight = Integer.parseInt(input1.getText());
+                VectorQuantization.vectorWidth = Integer.parseInt(input2.getText());
                 VectorQuantization.numOfCodebook = Integer.parseInt(input3.getText());
                 VectorQuantization.Compression();
                 VectorQuantization.writeToFile("x.txt");
