@@ -20,7 +20,7 @@ public class VectorQuantization {
     // the vector nearest to what of the original vectors of the image
     public static Map<float[][], ArrayList<float[][]>> nearestVectors = new HashMap<>();
     // the codebook
-    public static TreeMap<String, float[][]> codeBook = new TreeMap<>();
+    public static HashMap<String, float[][]> codeBook = new HashMap<>();
 
     // to read the image
     public static float[][] readImage(String filePath) throws IOException {
@@ -37,7 +37,8 @@ public class VectorQuantization {
                 int red = (rgb & 0x00ff0000) >> 16;
                 int green = (rgb & 0x0000ff00) >> 8;
                 int blue = (rgb & 0x000000ff);
-                pixels[j][i] = Math.max(Math.max(red, green), blue);
+               // pixels[j][i] = Math.max(Math.max(red, green), blue);
+                pixels[j][i]=red;
             }
         }
         return pixels;
@@ -191,7 +192,8 @@ public class VectorQuantization {
         while (true) {
             int counter = 0;
             for (int i = 0; i < blocks.size(); i++) {
-                float[][] vec = blocks.get(i);
+                float[][] vec = blocks.get(i); // for each block
+                //loop over all nearest blocks if found
                 for (float[][] vector : nearestVectors.keySet()) {
                     int c = 0;
                     for (int x = 0; x < vectorHeight; x++) {
@@ -233,7 +235,7 @@ public class VectorQuantization {
             // put it at the codebook
             codeBook.put(binary, blocks.get(i));
         }
-
+        // to know the length and the height of the compressed image
         compressedHeight = imageHeight / vectorHeight;
         compressedWidth = imageWidth / vectorWidth;
 
@@ -243,6 +245,7 @@ public class VectorQuantization {
         for (int i = 0; i < compressedHeight; i++) {
             for (int j = 0; j < compressedWidth; j++) {
                 for (float[][] vec : nearestVectors.keySet()) {
+
                     if (nearestVectors.get(vec).contains(originalBlocks.get(index))) {
                         compressedImage[i][j] = getCode(vec);
                     }
@@ -269,6 +272,7 @@ public class VectorQuantization {
     }
 
     public static void Decompression() {
+        // get the length and the width of the vector by loop on the codebook one time to get the vector length and width
         for (String code : codeBook.keySet()) {
             vectorHeight = codeBook.get(code).length;
             vectorWidth = codeBook.get(code)[0].length;
@@ -292,6 +296,11 @@ public class VectorQuantization {
         }
     }
 
+
+
+
+
+
     // the following to write the compressed code of the image and the codebook at file
     public static void writeToFile(String fileName) {
         String image = "";
@@ -300,7 +309,7 @@ public class VectorQuantization {
                 image += compressedImage[i][j] + " ";
             image += "\n";
         }
-
+        // to remove the end line
         image = image.substring(0, image.length() - 1);
         for (String code : codeBook.keySet()) {
             image += code + "\n";
@@ -314,6 +323,7 @@ public class VectorQuantization {
             }
         }
 
+        // to remove the end line
         image = image.substring(0, image.length() - 2);
 
         File file = new File(fileName);

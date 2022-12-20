@@ -24,7 +24,7 @@ public class Main {
         final JTextField input2 = new JTextField();
         input2.setBounds(190, 70, 150, 25);
 
-        label_3 = new JLabel("Enter Vector Width");
+        label_3 = new JLabel("Enter CodeBook Size");
         label_3.setBounds(50, 120, 300, 25);
         final JTextField input3 = new JTextField();
         input3.setBounds(190, 120, 150, 25);
